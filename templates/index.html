@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander Deck Survey</title>
+    <style>
+        input[type="checkbox"] {
+            width: 30px;
+            height: 30px;
+        }
+        form label img {
+            width: 225px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select all the decks that belong together.</h1>
+    <form action="/submit" method="post" id="checkboxForm">
+        {% for deck in decks %}
+            <label>
+                <input type="checkbox" name="selection" value="{{ deck['id'] }}">
+                <img src="{{ deck['image_url'] }}">
+            </label>
+            <input type="hidden" name="options" value="{{ deck['id'] }}">
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
