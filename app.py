@@ -46,7 +46,7 @@ def home():
 def submit():
     options = request.form.getlist('options')
     selection = request.form.getlist('selection')
-    update_edges(options,selection)
+    # update_edges(options,selection)
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
