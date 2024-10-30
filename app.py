@@ -10,7 +10,7 @@ def load_json(path):
 def update_edges(options, selection):
     '''Update the edges list based on options and user selection'''
     # load edges
-    edges = load_json('edges.json')
+    edges = load_json('data/edges.json')
 
     # loop for each possible edge
     for i in range(4):
@@ -30,12 +30,12 @@ def update_edges(options, selection):
                 edges[index] += 1 # gets farther 
 
     # save edges
-    with open('edges.json', 'w') as f:
+    with open('data/edges.json', 'w') as f:
         f.write(json.dumps(edges))
 
 
 app = Flask(__name__)
-nodes = load_json('nodes.json')
+nodes = load_json('data/nodes.json')
 # edges = [0] * (len(nodes) * (len(nodes) - 1) // 2)
 
 @app.route('/')
@@ -49,5 +49,5 @@ def submit():
     update_edges(options,selection)
     return redirect(url_for('home'))
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=8080)  # This allows access from other machines in the network
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
