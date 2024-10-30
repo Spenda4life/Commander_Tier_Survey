@@ -1,5 +1,5 @@
-runtime: python311  # Specify Python 3.11
-entrypoint: python3 app.py  # Your main application file
+runtime: python311
+entrypoint: gunicorn -b :$PORT main:app
 
 handlers:
   - url: /.*
