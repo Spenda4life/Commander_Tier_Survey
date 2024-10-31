@@ -4,27 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander Deck Survey</title>
-    <style>
-        input[type="checkbox"] {
-            width: 30px;
-            height: 30px;
-        }
-        form label img {
-            width: 225px;
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Select all the decks that belong together.</h1>
+    <h1>Select all decks that belong together.</h1>
     <form action="/submit" method="post" id="checkboxForm">
-        {% for deck in decks %}
-            <label>
-                <input type="checkbox" name="selection" value="{{ deck['id'] }}">
-                <img src="{{ deck['image_url'] }}">
-            </label>
-            <input type="hidden" name="options" value="{{ deck['id'] }}">
-        {% endfor %}
+        <div class="container">
+            {% for deck in decks %}
+                <div class="item">
+                    <label>
+                        <p>{{ deck['commander'] }}</p>
+                        <img src="{{ deck['image_url'] }}">
+                        <input type="checkbox" name="selection" value="{{ deck['id'] }}">
+                    </label>
+                </div>
+                <input type="hidden" name="options" value="{{ deck['id'] }}">
+            {% endfor %}
+        </div>
         <button type="submit">Submit</button>
     </form>
 </body>
