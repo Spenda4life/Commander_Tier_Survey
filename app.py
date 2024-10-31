@@ -1,6 +1,19 @@
 from flask import Flask, render_template, redirect, url_for, request
+from google.cloud import storage
 import random
 import json
+
+def write_json_to_gcs(file_name, data):
+    blob = bucket.blob(file_name)
+    json_data = json.dumps(data)
+    blob.upload_from_string(json_data, content_type='application/json')
+    print(f"Data written to gs://{bucket_name}/{file_name}")
+
+def read_json_from_gcs(file_name):
+    blob = bucket.blob(file_name)
+    json_data = blob.download_as_text()
+    data = json.loads(json_data)
+    return data
 
 def load_json(path):
    with open(path, 'r', encoding="utf-8") as f:
@@ -10,7 +23,7 @@ def load_json(path):
 def update_edges(options, selection):
     '''Update the edges list based on options and user selection'''
     # load edges
-    edges = load_json('data/edges.json')
+    edges = read_json_from_gcs('edges.json')
 
     # loop for each possible edge
     for i in range(4):
@@ -30,13 +43,17 @@ def update_edges(options, selection):
                 edges[index] += 1 # gets farther 
 
     # save edges
-    with open('data/edges.json', 'w') as f:
-        f.write(json.dumps(edges))
+    write_json_to_gcs('edges.json', edges)
 
 
 app = Flask(__name__)
+
+# google cloud storage variables
+bucket_name = 'ptero_cloud_storage'
+client = storage.Client()
+bucket = client.bucket(bucket_name)
+
 nodes = load_json('data/nodes.json')
-# edges = [0] * (len(nodes) * (len(nodes) - 1) // 2)
 
 @app.route('/')
 def home():
@@ -46,7 +63,7 @@ def home():
 def submit():
     options = request.form.getlist('options')
     selection = request.form.getlist('selection')
-    # update_edges(options,selection)
+    update_edges(options,selection)
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
