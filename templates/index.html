@@ -15,10 +15,10 @@
                     <label>
                         <p>{{ deck['commander'] }}</p>
                         <img src="{{ deck['image_url'] }}">
-                        <input type="checkbox" name="selection" value="{{ deck['id'] }}">
+                        <input type="checkbox" name="selection" value="{{ deck['commander'] }}">
                     </label>
                 </div>
-                <input type="hidden" name="options" value="{{ deck['id'] }}">
+                <input type="hidden" name="options" value="{{ deck['commander'] }}">
             {% endfor %}
         </div>
         <button type="submit">Submit</button>
