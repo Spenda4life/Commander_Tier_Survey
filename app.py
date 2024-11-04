@@ -21,19 +21,44 @@ def read_graph_from_gcs(file_name):
 
 def update_graph(options,selection):
     '''Update network graph based on user selection'''
-    G = read_graph_from_gcs('graph.pickle')
 
-    num_opts = len(options)
-    for i in range(num_opts):
-        for j in range(i + 1, num_opts):
-            if options[i] in selection and options[j] in selection:
-                # get node id for both options and add edge between them
+    number_of_selections = len(selection)
+
+    if number_of_selections > 0:
+        G = read_graph_from_gcs('graph.pickle')
+
+        # loop through all combinations of options
+        number_of_options = len(options)
+        for i in range(number_of_options):
+            for j in range(i + 1, number_of_options):
+
+                # get node id for both options
                 node1 = get_node(G, "commander", options[i])
                 node2 = get_node(G, "commander", options[j])
-                G.add_edge(node1, node2)
 
-    # write_graph_to_gcs('graph.pickle', G)
-    print(f'Adding edge between {node1} and {node2}')
+                # if both options have been selected, increase weight
+                increment = 2
+                if options[i] in selection and options[j] in selection:
+                    if G.has_edge(node1, node2):
+                        G[node1][node2]['weight'] += increment
+                        print(f'Increasing weight between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) to {G[node1][node2]["weight"]}')
+                    else:
+                        G.add_edge(node1, node2, weight=increment)
+                        print(f'Adding edge between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) with weight {increment}')
+
+                # if only one is selected, decrease weight
+                decrement = -1
+                if (options[i] in selection) ^ (options[j] in selection):
+                    if G.has_edge(node1, node2):
+                        G[node1][node2]['weight'] += decrement
+                        print(f'Decreasing weight between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) to {G[node1][node2]["weight"]}')
+                    else:
+                        G.add_edge(node1, node2, weight=decrement)
+                        print(f'Adding edge between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) with weight {decrement}')
+
+        write_graph_to_gcs('graph.pickle', G)
+    else:
+        print(f'{number_of_selections} selections were made. Graph was not updated.')
 
 
 def get_node(G, attr_name, attr_value):
@@ -43,14 +68,15 @@ def get_node(G, attr_name, attr_value):
             return node
 
 
-app = Flask(__name__)
-
 # google cloud storage variables
 bucket_name = 'ptero_cloud_storage'
 client = storage.Client()
 bucket = client.bucket(bucket_name)
 
 G = read_graph_from_gcs('graph.pickle')
+print(f'Successfully loaded {G}')
+
+app = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -61,6 +87,7 @@ def home():
 def submit():
     options = request.form.getlist('options')
     selection = request.form.getlist('selection')
+    print(f'Options: {options}\nSelection: {selection}')
     update_graph(options,selection)
     return redirect(url_for('home'))
 
