@@ -68,6 +68,19 @@ def get_node(G, attr_name, attr_value):
             return node
 
 
+def get_deck_options(G):
+    owners = []
+    decks = []
+    while len(decks) < 4:
+        random_deck = random.choice(list(G.nodes(data=True)))
+        commander = random_deck[1]['commander']
+        owner = commander.split('(')[1].strip(')')
+        if owner not in owners:
+            owners.append(owner)
+            decks.append(random_deck[1])
+    return decks
+
+
 # google cloud storage variables
 bucket_name = 'ptero_cloud_storage'
 client = storage.Client()
@@ -80,7 +93,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    decks = [G.nodes[node] for node in random.sample(list(G.nodes), 4)]
+    decks = get_deck_options(G)
     return render_template('index.html', decks=decks)
 
 @app.route('/submit', methods=['POST'])
