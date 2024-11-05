@@ -24,7 +24,7 @@ h1 {
 .container {
     display: flex;
     justify-content: space-around;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     max-width: 1200px;
     margin: auto;
     padding: 20px;

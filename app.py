@@ -19,13 +19,13 @@ def read_graph_from_gcs(file_name):
     return graph
 
 
-def update_graph(options,selection):
+def update_graph(options,selection,file_name):
     '''Update network graph based on user selection'''
 
     number_of_selections = len(selection)
 
     if number_of_selections > 0:
-        G = read_graph_from_gcs('graph.pickle')
+        G = read_graph_from_gcs(file_name)
 
         # loop through all combinations of options
         number_of_options = len(options)
@@ -56,7 +56,7 @@ def update_graph(options,selection):
                         G.add_edge(node1, node2, weight=decrement)
                         print(f'Adding edge between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) with weight {decrement}')
 
-        write_graph_to_gcs('graph.pickle', G)
+        write_graph_to_gcs(file_name, G)
     else:
         print(f'{number_of_selections} selections were made. Graph was not updated.')
 
@@ -82,7 +82,7 @@ def get_deck_options(G):
 
 
 # google cloud storage variables
-bucket_name = 'academic-atlas-440121-v6.appspot.com'
+bucket_name = 'ptero_cloud_storage'
 file_name = 'decks_graph.pickle'
 client = storage.Client()
 bucket = client.bucket(bucket_name)
@@ -102,7 +102,7 @@ def submit():
     options = request.form.getlist('options')
     selection = request.form.getlist('selection')
     print(f'Options: {options}\nSelection: {selection}')
-    update_graph(options,selection)
+    update_graph(options,selection,file_name)
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
