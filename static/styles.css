@@ -7,6 +7,20 @@ h1 {
     margin: 20px 0; 
 }
 
+.instruction {
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 20px; 
+    color: #054d73;
+    text-align: left; 
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    gap: 20px;
+}
+
 .container {
     display: flex;
     justify-content: space-around;

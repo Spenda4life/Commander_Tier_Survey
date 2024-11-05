@@ -82,11 +82,12 @@ def get_deck_options(G):
 
 
 # google cloud storage variables
-bucket_name = 'ptero_cloud_storage'
+bucket_name = 'academic-atlas-440121-v6.appspot.com'
+file_name = 'decks_graph.pickle'
 client = storage.Client()
 bucket = client.bucket(bucket_name)
 
-G = read_graph_from_gcs('graph.pickle')
+G = read_graph_from_gcs(file_name)
 print(f'Successfully loaded {G}')
 
 app = Flask(__name__)
