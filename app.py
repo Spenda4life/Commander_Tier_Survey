@@ -22,6 +22,8 @@ def read_graph_from_gcs(file_name):
 def update_graph(options,selection,file_name):
     '''Update network graph based on user selection'''
 
+    global G
+
     number_of_selections = len(selection)
 
     if number_of_selections > 0:
@@ -95,7 +97,8 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     decks = get_deck_options(G)
-    return render_template('index.html', decks=decks)
+    graph = nx.node_link_data(G, edges="edges")
+    return render_template('index.html', decks=decks, graph=graph)
 
 @app.route('/submit', methods=['POST'])
 def submit():

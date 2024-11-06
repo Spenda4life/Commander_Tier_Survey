@@ -79,5 +79,12 @@ button {
 }
 
 body {
-    background-color: #c8cfe9be;
+    background-color: #e1e4f0be;
+}
+
+#network {
+    width: 1000px;
+    height: 500px;
+    border: 1px solid lightgray;
+    margin: 0 auto;
 }

@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander Deck Survey</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Loads external vis.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.0.4/dist/vis-network.min.js"></script>
+    <!-- Link to the external css file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <h1>Commander Pod Clustering Experiment</h1>
@@ -28,5 +31,16 @@
         </div>
         <button type="submit">Submit</button>
     </form>
+
+    <div id="network"></div>
+    
+    <!-- Pass graph data as a global variable -->
+    <script>
+        var graphData = {{ graph | tojson | safe }};
+    </script>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    
 </body>
 </html>
