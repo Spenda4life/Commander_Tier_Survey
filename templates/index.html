@@ -24,7 +24,15 @@
                 <input type="hidden" name="options" value="{{ deck['commander'] }}">
             {% endfor %}
         </div>
-        <button type="submit">Submit</button>
+
+        <!-- You're welcome Nate -->
+        <div class="submit-buttons">
+            <button type="submit">Submit</button>
+            <button type="button" id="selectAll" onclick="selectAllcheckboxes()">Select All</button>
+            <!-- <input type="hidden" name="submitAll_bool" id="submitAll_bool" value="false"> -->
+            <!-- <button type="submit" id="submitAll" onclick="document.getElementById('submitAll_bool').value='true'">Good matchup!</button> -->
+        </div>
+
         <div class="instruction">
         Select the commanders that you think play well together or would make for a fun game.
         Unique pairings between commanders are strengthened or weakened based on user selection.
@@ -43,6 +51,13 @@
 
     <!-- Link to the external JavaScript file -->
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
-    
+
+    <script> 
+        function selectAllcheckboxes() { 
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]'); 
+            checkboxes.forEach(checkbox => checkbox.checked = true); 
+        } 
+    </script>
+
 </body>
 </html>

@@ -1,16 +1,17 @@
+body {
+    background-color: #e1e4f0be;
+    font-family: 'Montserrat', sans-serif; 
+    color: #054d73;
+}
 
 h1 {
-    font-family: 'Montserrat', sans-serif; 
     font-size: 30px; 
-    color: #054d73;
     text-align: center; 
     margin: 10px 0; 
 }
 
 .instruction {
-    font-family: 'Montserrat', sans-serif; 
-    font-size: 20px; 
-    color: #054d73;
+    font-size: 18px; 
     max-width: 1000px;
     padding: 20px;
 }
@@ -62,7 +63,7 @@ form {
 }
 
 button {
-    width: 150px; 
+    width: 175px; 
     height: 50px; 
     font-size: 18px; 
     font-family: 'Montserrat', sans-serif;
@@ -72,8 +73,13 @@ button {
     border-radius: 10px; 
 }
 
-body {
-    background-color: #e1e4f0be;
+.submit-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+#selectAll { 
+    background-color: #266528; 
 }
 
 #network {
