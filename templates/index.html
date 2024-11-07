@@ -11,26 +11,28 @@
 </head>
 <body>
     <h1>Commander Pod Clustering Experiment</h1>
-    <div class="instruction">
-        Select the commanders that you think play well together or would make for a fun game.
-        Unique pairings between commanders are strengthened or weakened based on user selection.
-        A single selection can used to represent an "odd man out", and making no selection will not affect pairings.
-    </div>
     <form action="/submit" method="post" id="checkboxForm">
         <div class="container">
             {% for deck in decks %}
                 <div class="item">
                     <label>
-                        <p>{{ deck['commander'] }}</p>
-                        <img src="{{ deck['image_url'] }}">
-                        <input type="checkbox" name="selection" value="{{ deck['commander'] }}">
+                    <p>{{ deck['commander'] }}</p>
+                    <img src="{{ deck['image_url'] }}">
+                    <input type="checkbox" name="selection" value="{{ deck['commander'] }}">
                     </label>
                 </div>
                 <input type="hidden" name="options" value="{{ deck['commander'] }}">
             {% endfor %}
         </div>
         <button type="submit">Submit</button>
+        <div class="instruction">
+        Select the commanders that you think play well together or would make for a fun game.
+        Unique pairings between commanders are strengthened or weakened based on user selection.
+        A single selection can used to represent an "odd man out", and making no selection will not affect pairings.
+        </div>
     </form>
+
+    
 
     <div id="network"></div>
     

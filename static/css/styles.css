@@ -1,24 +1,18 @@
 
 h1 {
     font-family: 'Montserrat', sans-serif; 
-    font-size: 32px; 
+    font-size: 30px; 
     color: #054d73;
     text-align: center; 
-    margin: 20px 0; 
+    margin: 10px 0; 
 }
 
 .instruction {
     font-family: 'Montserrat', sans-serif; 
     font-size: 20px; 
     color: #054d73;
-    text-align: left; 
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
     max-width: 1000px;
-    margin: auto;
     padding: 20px;
-    gap: 20px;
 }
 
 .container {
@@ -83,8 +77,8 @@ body {
 }
 
 #network {
-    width: 90vw;
-    height: 40vw;
+    width: 1000px;
+    height: 30vw;
     border: 1px solid rgb(137, 214, 239);
     margin: 0 auto;
 }
