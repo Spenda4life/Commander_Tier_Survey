@@ -83,8 +83,8 @@ body {
 }
 
 #network {
-    width: 1000px;
-    height: 500px;
-    border: 1px solid lightgray;
+    width: 90vw;
+    height: 40vw;
+    border: 1px solid rgb(137, 214, 239);
     margin: 0 auto;
 }

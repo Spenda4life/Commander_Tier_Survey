@@ -1,6 +1,6 @@
 // Get the container for the network
 var container = document.getElementById('network');
-
+var edge_length = 1000;
 
 // Prepare the data for nodes and edges
 var data = {
@@ -12,45 +12,34 @@ var data = {
     })),
     edges: new vis.DataSet(
         graphData.edges
-        .filter(function(edge) {
-            return edge.weight > 0;  // Filter out edges with weight <= 0
-        })
-        .map(function(edge) {
-            return {
-                from: edge.source,
-                to: edge.target,
-                weight: edge.weight
-            };
-        })
+            .filter(function(edge) {
+                return edge.weight !== undefined;
+            })
+            .map(function(edge) {
+                return {
+                    from: edge.source,
+                    to: edge.target,
+                    length: edge_length / (1 + Math.exp(edge.weight))
+                };
+            }
+        )
     )
 };
-
 
 // Define options for the network
 var options = {
     physics: {
         enabled: true,
-        barnesHut: {
-            gravitationalConstant: -2000,    // Controls attraction between nodes
-            springLength: 150,               // Ideal distance between nodes
-            springConstant: 0.04,            // Determines "stiffness" of edges
-        },
     },
     nodes: {
         shape: 'dot',
-        size: 10,
-        font: {
-            size: 12,
-            face: 'Verdana',
-            color: '#054d73'
-        }
+        size: 12,
     },
     edges: {
         smooth: false,
-        width: 0.25
+        width: 0.1,
     }
 };
-
 
 // Initialize the network
 var network = new vis.Network(container, data, options);
