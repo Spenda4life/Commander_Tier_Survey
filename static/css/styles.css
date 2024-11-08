@@ -11,15 +11,12 @@ body {
 }
 
 .container {
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; Two columns for 2x2 grid */
     display: flex;
-    justify-content: space-around;
-    flex-wrap: nowrap;
-    max-width: 1200px;
+    flex-wrap: wrap;
+    min-width: 550px;
     margin: auto;
-    padding: 20px;
-    gap: 20px;
+    padding: 10px;
+    gap: 1px;
 }
 
 .item {
