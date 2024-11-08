@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Commander Pod Clustering Experiment</h1>
     <form action="/submit" method="post" id="checkboxForm">
         <div class="container">
             {% for deck in decks %}
@@ -19,28 +18,24 @@
                     <p>{{ deck['commander'] }}</p>
                     <img src="{{ deck['image_url'] }}">
                     <input type="checkbox" name="selection" value="{{ deck['commander'] }}">
+                    <input type="hidden" name="options" value="{{ deck['commander'] }}">
                     </label>
                 </div>
-                <input type="hidden" name="options" value="{{ deck['commander'] }}">
             {% endfor %}
         </div>
-
-        <!-- You're welcome Nate -->
         <div class="submit-buttons">
             <button type="submit">Submit</button>
             <button type="button" id="selectAll" onclick="selectAllcheckboxes()">Select All</button>
-            <!-- <input type="hidden" name="submitAll_bool" id="submitAll_bool" value="false"> -->
-            <!-- <button type="submit" id="submitAll" onclick="document.getElementById('submitAll_bool').value='true'">Good matchup!</button> -->
-        </div>
-
-        <div class="instruction">
-        Select the commanders that you think play well together or would make for a fun game.
-        Unique pairings between commanders are strengthened or weakened based on user selection.
-        A single selection can used to represent an "odd man out", and making no selection will not affect pairings.
         </div>
     </form>
 
-    
+    <div class="instruction">
+        <p>
+        Select the commanders that you think play well together or would make for a fun game.
+        Unique pairings between commanders are strengthened or weakened based on user selection.
+        A single selection can used to represent an "odd man out", and making no selection will not affect pairings.
+        </p>
+    </div>
 
     <div id="network"></div>
     
