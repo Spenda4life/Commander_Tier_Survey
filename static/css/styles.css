@@ -25,6 +25,12 @@ body {
     align-items: center;
     width: 225px;
     text-align: center;
+    border: 1px solid transparent;
+    transition: border 0.3s;
+}
+
+.item.selected {
+    border: 2px solid blue;
 }
 
 .item p {

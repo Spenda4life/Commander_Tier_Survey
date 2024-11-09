@@ -1,13 +1,15 @@
+
 // Get the container for the network
 var container = document.getElementById('network');
-var edge_length = 1000;
 
 // Prepare the data for nodes and edges
+var max_edge_length = 1000;
 var data = {
     nodes: new vis.DataSet(graphData.nodes.map(function(node) {
         return {
             id: node.id,
-            label: node.commander
+            label: node.commander,
+            // group: node.group
         };
     })),
     edges: new vis.DataSet(
@@ -19,7 +21,7 @@ var data = {
                 return {
                     from: edge.source,
                     to: edge.target,
-                    length: edge_length / (1 + Math.exp(edge.weight))
+                    length: max_edge_length / (1 + Math.exp(edge.weight))
                 };
             }
         )

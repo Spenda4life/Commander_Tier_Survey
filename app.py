@@ -3,6 +3,7 @@ from google.cloud import storage
 import random
 import networkx as nx
 import pickle
+import math
 
 
 def write_graph_to_gcs(file_name, graph):
@@ -81,6 +82,20 @@ def get_deck_options(G):
             owners.append(owner)
             decks.append(random_deck[1])
     return decks
+
+
+def assign_community(G):
+    # set distance as an inverted sigmoid of weight
+    for _,_,data in G.edges(data=True):
+        data["distance"] = 1 / (1 + math.exp(-data["weight"]))
+    # determine groups based on louvian algorithm
+    communities = nx.community.louvain_communities(G, weight="distance")
+    # assign group id to node
+    for group, nodes in enumerate(communities):
+        for node in nodes:
+            G.nodes[node]['group'] = group
+    # return updated graph
+    return G
 
 
 # google cloud storage variables
