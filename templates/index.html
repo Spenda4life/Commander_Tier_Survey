@@ -11,26 +11,24 @@
 </head>
 <body>
     <form action="/submit" method="post" id="checkboxForm">
-        <div class="container">
             {% for deck in decks %}
-                <div class="item" onclick="toggleSelection(this)">
-                    <label>
-                        <p id="{{ deck['commander'] }}"></p>
-                        <img src="{{ deck['image_url'] }}">
-                        <input type="hidden" name="selection" value="">
-                        <input type="hidden" name="options" value="{{ deck['commander'] }}">
-                    </label>
-                </div>
-                <script>
-                    var commanderText = "{{ deck['commander'] }}";
-                    var owner = commanderText.split('(')[1].replace(')', '');
-                    var ownerElement = document.getElementById("{{ deck['commander'] }}");
-                    if (ownerElement) {
-                        ownerElement.textContent = owner;
-                    }
-                </script>
-            {% endfor %}
-        </div>
+            <div class="item" onclick="toggleSelection(this)">
+                <label>
+                    <p id="{{ deck['commander'] }}"></p>
+                    <img src="{{ deck['image_url'] }}">
+                    <input type="hidden" name="selection" value="">
+                    <input type="hidden" name="options" value="{{ deck['commander'] }}">
+                </label>
+            </div>
+            <script>
+                var commanderText = "{{ deck['commander'] }}";
+                var owner = commanderText.split('(')[1].replace(')', '');
+                var ownerElement = document.getElementById("{{ deck['commander'] }}");
+                if (ownerElement) {
+                    ownerElement.textContent = owner;
+                }
+            </script>
+        {% endfor %}
         <div class="submit-buttons">
             <button type="submit">Submit</button>
             <button type="button" id="selectAll" onclick="selectAllOptions()">Select All</button>
