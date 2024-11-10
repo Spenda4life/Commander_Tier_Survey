@@ -15,12 +15,21 @@
             {% for deck in decks %}
                 <div class="item" onclick="toggleSelection(this)">
                     <label>
-                        <p>{{ deck['commander'] }}</p>
+                        <p id="{{ deck['commander'] }}"></p>
                         <img src="{{ deck['image_url'] }}">
                         <input type="hidden" name="selection" value="">
                         <input type="hidden" name="options" value="{{ deck['commander'] }}">
                     </label>
                 </div>
+                <script>
+                    var commanderText = "{{ deck['commander'] }}";
+                    var owner = commanderText.match(/\(([^)]+)\)/)[1];
+                    // Set the text content for the corresponding element
+                    var ownerElement = document.getElementById("{{ deck['commander'] }}");
+                    if (ownerElement) {
+                        ownerElement.textContent = owner;
+                    }
+                </script>
             {% endfor %}
         </div>
         <div class="submit-buttons">
@@ -56,40 +65,24 @@
         function toggleSelection(item) {
             const selectionInput = item.querySelector('input[name="selection"]');
             
+            // Ensure selectionInput exists
+            if (!selectionInput) {
+                console.error("Selection input not found for:", item);
+                return;
+            }
+            
             // Toggle the selected class on the div
             item.classList.toggle('selected');
             
             // Toggle the value of the selection input based on selection status
+            const textElement = item.querySelector('p');
             if (item.classList.contains('selected')) {
-                selectionInput.value = item.querySelector('p').innerText;
+                selectionInput.value = textElement ? textElement.innerText : "";
             } else {
                 selectionInput.value = "";
             }
-        }
+        }        
     </script>
-
-    <!-- <script> 
-
-        function selectAllcheckboxes() { 
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]'); 
-            checkboxes.forEach(checkbox => checkbox.checked = true); 
-        } 
-
-        function toggleSelection(item) {
-            const selectionInput = item.querySelector('input[name="selection"]');
-            
-            // Toggle the selected class on the div
-            item.classList.toggle('selected');
-            
-            // Toggle the value of the selection input based on selection status
-            if (item.classList.contains('selected')) {
-                selectionInput.value = "{{ deck['commander'] }}";
-            } else {
-                selectionInput.value = "";
-            }
-        }
-
-    </script> -->
 
 </body>
 </html>

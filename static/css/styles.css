@@ -4,64 +4,50 @@ body {
     color: #054d73;
 }
 
-.instruction {
-    font-size: 18px; 
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
 .container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     min-width: 550px;
-    margin: auto;
-    padding: 10px;
-    gap: 1px;
 }
 
 .item {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
     width: 225px;
     text-align: center;
-    border: 1px solid transparent;
+    border: 6px solid transparent;
     transition: border 0.3s;
+    border-radius: 18px;
 }
 
 .item.selected {
-    border: 2px solid blue;
+    border: 6px solid #a40000;
+    border-radius: 18px;
 }
 
 .item p {
-    height: 50px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    font-size: 17px; 
+    margin: 0 auto;
+    margin-bottom: -20px;
+    height: 35px;
+    padding: 5px;
+    color: white;
+    background-color: black;
+    border-radius: 12px;
 }
 
 .item img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-}
-
-input[type="checkbox"] {
-    width: 30px;
-    height: 30px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
+    margin-bottom: -4px;
+    border-radius: 12px;
 }
 
 button {
     width: 175px; 
-    height: 50px; 
+    height: 40px; 
     font-size: 18px;
     color: white;
     background-color: #054d73;
@@ -71,16 +57,24 @@ button {
 
 .submit-buttons {
     display: flex;
+    justify-content: center;
     gap: 20px;
+    margin-top: 10px;
 }
 
 #selectAll { 
     background-color: #266528; 
 }
 
+.instruction {
+    font-size: 18px; 
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 #network {
-    width: 1000px;
+    width: 100vw;
     height: 750px;
-    border: 1px solid rgb(137, 214, 239);
+    /* border: 1px solid rgb(137, 214, 239); */
     margin: 0 auto;
 }
