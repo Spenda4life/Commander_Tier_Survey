@@ -23,8 +23,7 @@
                 </div>
                 <script>
                     var commanderText = "{{ deck['commander'] }}";
-                    var owner = commanderText.match(/\(([^)]+)\)/)[1];
-                    // Set the text content for the corresponding element
+                    var owner = commanderText.split('(')[1].replace(')', '');
                     var ownerElement = document.getElementById("{{ deck['commander'] }}");
                     if (ownerElement) {
                         ownerElement.textContent = owner;
@@ -37,51 +36,49 @@
             <button type="button" id="selectAll" onclick="selectAllOptions()">Select All</button>
         </div>
     </form>
-
     <div class="instruction">
-        <p>
-        Select the commanders that you think play well together or would make for a fun game.
-        Unique pairings between commanders are strengthened or weakened based on user selection.
-        A single selection can used to represent an "odd man out", and making no selection will not affect pairings.
-        </p>
+        Select the commander decks that you think play well together. 
+        Connections (edges) between commanders (nodes) are strengthened or weakened based on user selection. 
+        Any edge between two selected nodes is strengthened, and any edge between a selected and unselected node is weakened.
+        Edges between unselected nodes are unchanged, therefore making no selection will not affect edge weights.
     </div>
 
-    <div id="network"></div>
-    
-    <!-- Pass graph data as a global variable -->
     <script>
-        var graphData = {{ graph | tojson | safe }};
-    </script>
-
-    <!-- Link to the external JavaScript file -->
-    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
-
-    <script>
-        function selectAllOptions() { 
-            const options = document.querySelectorAll('.item'); 
-            options.forEach(toggleSelection); 
-        } 
+        function selectAllOptions() {
+            const options = document.querySelectorAll('.item');
+            const selectedOptions = Array.from(options).filter(option => option.classList.contains('selected'));
         
-        function toggleSelection(item) {
+            // Decide the desired selection state
+            const shouldSelectAll = selectedOptions.length !== options.length;
+        
+            // Apply the desired selection state to all options
+            options.forEach(option => toggleSelection(option, shouldSelectAll));
+        }        
+
+        function toggleSelection(item, shouldSelect = null) {
             const selectionInput = item.querySelector('input[name="selection"]');
-            
-            // Ensure selectionInput exists
-            if (!selectionInput) {
-                console.error("Selection input not found for:", item);
-                return;
-            }
-            
-            // Toggle the selected class on the div
-            item.classList.toggle('selected');
-            
-            // Toggle the value of the selection input based on selection status
-            const textElement = item.querySelector('p');
-            if (item.classList.contains('selected')) {
-                selectionInput.value = textElement ? textElement.innerText : "";
+            const optionsInput = item.querySelector('input[name="options"]');
+
+            // Determine whether to toggle or set based on shouldSelect parameter
+            const isSelected = item.classList.contains('selected');
+            const newSelectionState = shouldSelect !== null ? shouldSelect : !isSelected;
+        
+            // Update selection state and input value
+            if (newSelectionState) {
+                item.classList.add('selected');
+                selectionInput.value = optionsInput.value
             } else {
+                item.classList.remove('selected');
                 selectionInput.value = "";
             }
-        }        
+        }               
+    </script>
+
+    <!-- Network visualization -->
+    <div id="network"></div>
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <script>
+        var graphData = {{ graph | tojson | safe }};
     </script>
 
 </body>

@@ -1,3 +1,9 @@
+/* body {
+    background-color: #121420;
+    font-family: 'Montserrat', sans-serif; 
+    color: #a9a9a9;
+} */
+
 body {
     background-color: #e1e4f0be;
     font-family: 'Montserrat', sans-serif; 
@@ -67,9 +73,11 @@ button {
 }
 
 .instruction {
-    font-size: 18px; 
-    max-width: 1000px;
+    font-size: 16px; 
+    max-width: 940px;
+    min-width: 500px;
     margin: 0 auto;
+    padding: 20px;
 }
 
 #network {
