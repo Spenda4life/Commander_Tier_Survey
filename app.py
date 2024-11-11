@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 from google.cloud import storage
 import random
 import networkx as nx
@@ -6,21 +6,21 @@ import pickle
 import math
 
 
-def write_graph_to_gcs(file_name, graph):
+def write_graph_to_gcs(graph):
     blob = bucket.blob(file_name)
     data = pickle.dumps(graph)
     blob.upload_from_string(data=data)
     print(f"Data written to gs://{bucket_name}/{file_name}")
 
 
-def read_graph_from_gcs(file_name):
+def read_graph_from_gcs():
     blob = bucket.blob(file_name)
     data = blob.download_as_string()
     graph = pickle.loads(data)
     return graph
 
 
-def update_graph(options,selection,file_name):
+def update_graph(options,selection):
     '''Update network graph based on user selection'''
 
     global G
@@ -28,7 +28,7 @@ def update_graph(options,selection,file_name):
     number_of_selections = len(selection)
 
     if number_of_selections > 0:
-        G = read_graph_from_gcs(file_name)
+        G = read_graph_from_gcs()
 
         # loop through all combinations of options
         number_of_options = len(options)
@@ -59,7 +59,7 @@ def update_graph(options,selection,file_name):
                         G.add_edge(node1, node2, weight=decrement)
                         print(f'Adding edge between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) with weight {decrement}')
 
-        write_graph_to_gcs(file_name, G)
+        write_graph_to_gcs(G)
     else:
         print(f'{number_of_selections} selections were made. Graph was not updated.')
 
@@ -104,7 +104,7 @@ file_name = 'decks_graph.pickle'
 client = storage.Client()
 bucket = client.bucket(bucket_name)
 
-G = read_graph_from_gcs(file_name)
+G = read_graph_from_gcs()
 print(f'Successfully loaded {G}')
 
 app = Flask(__name__)
@@ -112,15 +112,26 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     decks = get_deck_options(G)
-    graph = nx.node_link_data(G, edges="edges")
-    return render_template('index.html', decks=decks, graph=graph)
+    return render_template('index.html', decks=decks)
+
+# Display graph
+@app.route('/graph')
+def display_graph():
+    return render_template('network_graph.html')
+
+# Endpoint to get graph data for Vis.js
+@app.route('/get_graph')
+def get_graph():
+    G = read_graph_from_gcs()
+    graph_data = nx.node_link_data(G, edges="edges")
+    return jsonify(graph_data)
 
 @app.route('/submit', methods=['POST'])
 def submit():
     options = request.form.getlist('options')
     selection = request.form.getlist('selection')
     print(f'Options: {options}\nSelection: {selection}')
-    update_graph(options,selection,file_name)
+    update_graph(options,selection)
     return redirect(url_for('home'))
 
 if __name__ == '__main__':

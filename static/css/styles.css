@@ -1,10 +1,8 @@
 
 body {
     background-color: #e1e4f0be;
-    /* background-color: #121420; */
     font-family: 'Montserrat', sans-serif; 
     color: #054d73;
-    /* color: #a9a9a9; */
 }
 
 form {
@@ -76,12 +74,10 @@ button {
     min-width: 500px;
     margin: 0 auto;
     padding: 20px;
-    /* flex-basis: 100%; */
 }
 
 #network {
-    width: 100vw;
-    height: 750px;
-    /* border: 1px solid rgb(137, 214, 239); */
-    margin: 0 auto;
+    width: 75vw;
+    height: 90vh;
+    border: 1px solid rgb(137, 214, 239);
 }

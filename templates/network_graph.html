@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Visualization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+    <a href="/">Home</a>
+    <div id="network"></div>
+
+    <script>
+        // Fetch graph data from Flask
+        fetch('/get_graph')
+            .then(response => response.json())
+            .then(data => {
+                const nodes = new vis.DataSet(data.nodes.map(node => ({
+                    id: node.id,
+                    // label: node.commander,
+                    image: node.image_url,
+                    shape: 'image'
+                })));
+
+                const edges = new vis.DataSet(data.edges.map(edge => ({
+                    from: edge.source,
+                    to: edge.target,
+                    length: 1000 / (1 + Math.exp(edge.weight))
+                })));
+
+                const container = document.getElementById('network');
+                const visData = { nodes: nodes, edges: edges };
+                const options = {
+                    edges: { 
+                        smooth: false, 
+                        width: 0.1
+                    },
+                    nodes: { 
+                        size: 25
+                    },
+                };
+                new vis.Network(container, visData, options);
+            });
+    </script>
+</body>
+</html>

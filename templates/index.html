@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander Deck Survey</title>
-    <!-- Loads external vis.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.0.4/dist/vis-network.min.js"></script>
-    <!-- Link to the external css file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -39,8 +36,8 @@
         Connections (edges) between commanders (nodes) are strengthened or weakened based on user selection. 
         Any edge between two selected nodes is strengthened, and any edge between a selected and unselected node is weakened.
         Edges between unselected nodes are unchanged, therefore making no selection will not affect edge weights.
+        View the resulting network graph <a href="/graph">here</a>.
     </div>
-
     <script>
         function selectAllOptions() {
             const options = document.querySelectorAll('.item');
@@ -71,13 +68,5 @@
             }
         }               
     </script>
-
-    <!-- Network visualization -->
-    <div id="network"></div>
-    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
-    <script>
-        var graphData = {{ graph | tojson | safe }};
-    </script>
-
 </body>
 </html>
