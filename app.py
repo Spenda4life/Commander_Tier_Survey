@@ -25,9 +25,9 @@ def update_graph(options,selection):
 
     global G
 
-    number_of_selections = len(selection)
-
-    if number_of_selections > 0:
+    if all([not x for x in selection]): # checks for list of empty strings
+        print(f'No selections were made. Graph was not updated.')
+    else:
         G = read_graph_from_gcs()
 
         # loop through all combinations of options
@@ -60,8 +60,6 @@ def update_graph(options,selection):
                         print(f'Adding edge between {options[i]} (Node: {node1}) and {options[j]} (Node: {node2}) with weight {decrement}')
 
         write_graph_to_gcs(G)
-    else:
-        print(f'{number_of_selections} selections were made. Graph was not updated.')
 
 
 def get_node(G, attr_name, attr_value):
