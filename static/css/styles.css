@@ -81,3 +81,14 @@ button {
     height: 90vh;
     border: 1px solid rgb(137, 214, 239);
 }
+
+/* style for partition images */
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.image-container img {
+    width: 100px;
+    height: auto;
+}

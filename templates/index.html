@@ -36,7 +36,9 @@
         Connections (edges) between commanders (nodes) are strengthened or weakened based on user selection. 
         Any edge between two selected nodes is strengthened, and any edge between a selected and unselected node is weakened.
         Edges between unselected nodes are unchanged, therefore making no selection will not affect edge weights.
-        View the resulting network graph <a href="/graph">here</a>.
+        Options are determined via random selection from within a detected community. 
+        The <a href='https://en.wikipedia.org/wiki/Louvain_method'>Louvian method</a> is used for community detection.
+        View the resulting network graph <a href="/graph">here</a>. View communities <a href="/communities">here</a>.
     </div>
     <script>
         function selectAllOptions() {

@@ -23,7 +23,7 @@ def read_graph_from_gcs():
 def update_graph(options,selection):
     '''Update network graph based on user selection'''
 
-    global G
+    # global G
 
     if all([not x for x in selection]): # checks for list of empty strings
         print(f'No selections were made. Graph was not updated.')
@@ -69,7 +69,7 @@ def get_node(G, attr_name, attr_value):
             return node
 
 
-def get_deck_options(G):
+def get_options_by_owner(G):
     owners = []
     decks = []
     while len(decks) < 4:
@@ -82,18 +82,32 @@ def get_deck_options(G):
     return decks
 
 
-def assign_community(G):
-    # set distance as an inverted sigmoid of weight
+def louvian_partition(G):
+    # convert edge weights to an edge strength using sigmoid function
+    k = -.125
     for _,_,data in G.edges(data=True):
-        data["distance"] = 1 / (1 + math.exp(-data["weight"]))
-    # determine groups based on louvian algorithm
-    communities = nx.community.louvain_communities(G, weight="distance")
-    # assign group id to node
-    for group, nodes in enumerate(communities):
-        for node in nodes:
-            G.nodes[node]['group'] = group
-    # return updated graph
-    return G
+        data["strength"] =1 / (1 + math.exp(k * data["weight"]))
+
+    # determine louvian partition
+    partition = nx.community.louvain_communities(G, weight="strength")
+    return partition
+
+
+def get_options_by_community(G):
+
+    # get louvian partition
+    partition = louvian_partition(G)
+    
+    # select 4 random nodes from a random partition
+    valid_partitions = [community for community in partition if len(community) >= 4]
+    if valid_partitions:
+        random_part = random.choice(valid_partitions)
+        nodes = random.sample(sorted(random_part), 4)
+    else:
+        nodes = random.sample(sorted(G.nodes), 4)
+
+    nodes_as_dict = [G.nodes(data=True)[node] for node in nodes]
+    return nodes_as_dict
 
 
 # google cloud storage variables
@@ -102,27 +116,26 @@ file_name = 'decks_graph.pickle'
 client = storage.Client()
 bucket = client.bucket(bucket_name)
 
-G = read_graph_from_gcs()
-print(f'Successfully loaded {G}')
-
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
-    decks = get_deck_options(G)
+    G = read_graph_from_gcs()
+    # decks = get_options_by_owner(G)
+    decks = get_options_by_community(G)
     return render_template('index.html', decks=decks)
 
-# Display graph
+
 @app.route('/graph')
 def display_graph():
     return render_template('network_graph.html')
 
-# Endpoint to get graph data for Vis.js
-@app.route('/get_graph')
-def get_graph():
-    G = read_graph_from_gcs()
-    graph_data = nx.node_link_data(G, edges="edges")
-    return jsonify(graph_data)
+
+@app.route('/communities')
+def communities():
+    return render_template('communities.html')
+
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -131,6 +144,22 @@ def submit():
     print(f'Options: {options}\nSelection: {selection}')
     update_graph(options,selection)
     return redirect(url_for('home'))
+
+
+@app.route('/get_graph')
+def get_graph():
+    G = read_graph_from_gcs()
+    graph_data = nx.node_link_data(G, edges="edges")
+    return jsonify(graph_data)
+
+
+@app.route('/get_communities')
+def get_communities():
+    G = read_graph_from_gcs()
+    partition = louvian_partition(G)
+    result = [[G.nodes(data=True)[node] for node in community] for community in partition]
+    return jsonify(result)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

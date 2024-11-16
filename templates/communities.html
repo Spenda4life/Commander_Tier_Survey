@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Communities</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+    <a href="/">Home</a>
+    <div id="communities"></div>
+
+    <script>
+        fetch('/get_communities')
+            .then(response => response.json())
+            .then(data => {
+                const contentDiv = document.getElementById("communities");
+
+                data.forEach((partition, index) => {
+                    const partitionDiv = document.createElement("div");
+                    partitionDiv.className = "partition";
+                    partitionDiv.innerHTML = `<h3>Group ${index + 1}</h3>`;
+
+                    const imageContainer = document.createElement("div");
+                    imageContainer.className = "image-container";
+
+                    partition.forEach(item => {
+                        const img = document.createElement("img");
+                        img.src = item.image_url;
+                        img.alt = item.commander;
+                        imageContainer.appendChild(img);
+                    });
+
+                    partitionDiv.appendChild(imageContainer);
+                    contentDiv.appendChild(partitionDiv);
+                });
+            })
+    </script>
+</body>
+</html>
