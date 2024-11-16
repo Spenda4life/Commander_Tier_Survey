@@ -21,10 +21,12 @@
                     shape: 'image'
                 })));
 
+                const minLength = 1000;
+                const scale = .4;
                 const edges = new vis.DataSet(data.edges.map(edge => ({
                     from: edge.source,
                     to: edge.target,
-                    length: 1000 / (1 + Math.exp(edge.weight))
+                    length: minLength / (1 + Math.exp(scale*edge.weight))
                 })));
 
                 const container = document.getElementById('network');
