@@ -89,7 +89,7 @@ def louvian_partition(G):
         data["strength"] =1 / (1 + math.exp(k * data["weight"]))
 
     # determine louvian partition
-    partition = nx.community.louvain_communities(G, weight="strength")
+    partition = nx.community.louvain_communities(G, weight="strength", resolution=1.1, seed=56)
     return partition
 
 

@@ -32,13 +32,18 @@
         </div>
     </form>
     <div class="instruction">
-        Select the commander decks that you think play well together. 
-        Connections (edges) between commanders (nodes) are strengthened or weakened based on user selection. 
-        Any edge between two selected nodes is strengthened, and any edge between a selected and unselected node is weakened.
-        Edges between unselected nodes are unchanged, therefore making no selection will not affect edge weights.
-        Options are determined via random selection from within a detected community. 
-        The <a href='https://en.wikipedia.org/wiki/Louvain_method'>Louvian method</a> is used for community detection.
-        View the resulting network graph <a href="/graph">here</a>. View communities <a href="/communities">here</a>.
+        <p>
+            Select the commander decks that you think play well together. 
+            Connections (edges) between commanders (nodes) are strengthened or weakened based on user selection. 
+            Any edge between two selected nodes is strengthened, and any edge between a selected and unselected node is weakened.
+            Edges between unselected nodes are unchanged, therefore making no selection will not affect edge weights.
+            Options are determined via random selection from within a detected community.
+        </p>
+        <p>
+            <a href="/graph">Graph Visualization</a><br>
+            <a href="/communities">Communities</a><br>
+            <a href='https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.community.louvain.louvain_communities.html'>Networkx algorithm</a><br>
+        </p>
     </div>
     <script>
         function selectAllOptions() {
