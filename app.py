@@ -23,8 +23,6 @@ def read_graph_from_gcs():
 def update_graph(options,selection):
     '''Update network graph based on user selection'''
 
-    # global G
-
     if all([not x for x in selection]): # checks for list of empty strings
         print(f'No selections were made. Graph was not updated.')
     else:
@@ -110,6 +108,28 @@ def get_options_by_community(G):
     return nodes_as_dict
 
 
+def get_options_by_weight(G):
+    # Calculate and sort nodes by the sum of absolute weights of their edges
+    sorted_nodes = sorted(
+        ((node, sum(abs(x) for _, _, x in G.edges(node, data="weight"))) for node in G.nodes),
+        key=lambda x: x[1]
+    )
+
+    # Select bottom 10% nodes based on weight sums
+    split_index = len(sorted_nodes) // 10
+    bottom_nodes = [node for node, _ in sorted_nodes[:split_index]]
+    
+    # Randomly sample 2 nodes from bottom_nodes
+    nodes = set(random.sample(bottom_nodes, 2))
+    
+    # Add more random nodes until there are 4 unique nodes
+    while len(nodes) < 4:
+        nodes.add(random.choice(list(G.nodes)))
+
+    nodes_as_dict = [G.nodes(data=True)[node] for node in nodes]
+    return nodes_as_dict
+
+
 # google cloud storage variables
 bucket_name = 'ptero_cloud_storage'
 file_name = 'decks_graph.pickle'
@@ -123,7 +143,8 @@ app = Flask(__name__)
 def home():
     G = read_graph_from_gcs()
     # decks = get_options_by_owner(G)
-    decks = get_options_by_community(G)
+    # decks = get_options_by_community(G)
+    decks = get_options_by_weight(G)
     return render_template('index.html', decks=decks)
 
 
