@@ -144,7 +144,8 @@ def home():
     G = read_graph_from_gcs()
     # decks = get_options_by_owner(G)
     # decks = get_options_by_community(G)
-    decks = get_options_by_weight(G)
+    # decks = get_options_by_weight(G)
+    decks = random.choices([get_options_by_community(G),get_options_by_weight(G)], weights=[1,3],k=1)[0]
     return render_template('index.html', decks=decks)
 
 
